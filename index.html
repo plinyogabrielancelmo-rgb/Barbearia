@@ -1,0 +1,508 @@
+<!doctype html>
+<!--
+  COMO PERSONALIZAR ESTE SITE
+
+  1. Nome: troque "Navalha" e "Barbearia" na logo (topo e rodapé), no título da página (title) e no texto do rodapé.
+  2. Cores e fontes: variáveis no começo do CSS, dentro de :root.
+  3. Serviços e valores: bloco com id "servicos". É só editar os textos.
+  4. Horários: bloco com id "horarios". Edite data-abre e data-fecha (formato HH:MM) de cada dia.
+     Dia sem data-abre aparece como "Fechado". O "Aberto agora" é calculado sozinho.
+  5. WhatsApp: no bloco de JavaScript no fim do arquivo, preencha WHATSAPP com 55 + DDD + número (só dígitos).
+     Os botões "Agendar horário" passam a abrir a conversa no WhatsApp.
+  6. Endereço, Instagram e mapa: bloco com id "contato".
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navalha Barbearia</title>
+<meta name="description" content="Corte, barba e acabamento na navalha, com hora marcada. Veja os serviços, valores e horários da Navalha Barbearia.">
+<meta name="theme-color" content="#0E2038">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230E2038'/%3E%3Crect x='22' y='10' width='20' height='44' rx='3' fill='%23F2F4F5'/%3E%3Cpath d='M22 22l20-10v10L22 32zM22 40l20-10v10L22 50z' fill='%23C8283A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --marinho:#0E2038;
+  --marinho-rgb:14,32,56;
+  --porcelana:#F2F4F5;
+  --porcelana-rgb:242,244,245;
+  --vermelho:#C8283A;
+  --azul:#1F4E9B;
+  --aco:#B7C4D3;
+  --aco-claro:#C9D5E2;
+  --aco-escuro:#9DB0C6;
+  --texto-suave:#34475E;
+  --texto-mudo:#4A5B70;
+  --cor-aberto:#5FD6A0;
+  --cor-fechado:#F0A93B;
+  --fonte-display:'Big Shoulders Display','Arial Narrow','Roboto Condensed',Impact,sans-serif;
+  --fonte-texto:'Hanken Grotesk',system-ui,'Segoe UI',Helvetica,Arial,sans-serif;
+  --listras:linear-gradient(135deg,var(--vermelho) 0%,var(--vermelho) 12.5%,var(--porcelana) 12.5%,var(--porcelana) 25%,var(--azul) 25%,var(--azul) 37.5%,var(--porcelana) 37.5%,var(--porcelana) 50%,var(--vermelho) 50%,var(--vermelho) 62.5%,var(--porcelana) 62.5%,var(--porcelana) 75%,var(--azul) 75%,var(--azul) 87.5%,var(--porcelana) 87.5%,var(--porcelana) 100%);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
+body{margin:0;font-family:var(--fonte-texto);color:var(--marinho);background:var(--porcelana);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,dl,dd,ul{margin:0}
+ul{padding:0;list-style:none}
+a{color:inherit}
+[hidden]{display:none!important}
+h1,h2,h3,h4{font-family:var(--fonte-display);text-transform:uppercase}
+h2{font-weight:800;font-size:clamp(52px,6vw,80px);line-height:.95}
+.miolo{max-width:1200px;margin:0 auto;padding-left:32px;padding-right:32px}
+
+/* Links e botões */
+.nl{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;font-size:16px;font-weight:500;color:var(--aco-claro);text-decoration:none}
+.nl:hover{color:#fff;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 30px;background:var(--vermelho);color:#fff;font-size:17px;font-weight:700;letter-spacing:.01em;text-decoration:none;border-radius:3px}
+.btn:hover{filter:brightness(.88)}
+.btn-sm{min-height:44px;padding:0 22px;font-size:16px}
+.lk{display:inline-flex;align-items:center;min-height:44px;font-size:17px;font-weight:600;color:var(--porcelana);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
+.lk:hover{text-decoration-color:var(--vermelho)}
+.escuro a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.claro a:focus-visible{outline:3px solid var(--marinho);outline-offset:3px}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+.poste{display:flex;flex-direction:column;align-items:center}
+.tampa{display:block;width:24px;height:7px;background:var(--aco)}
+.tampa-cima{border-radius:4px 4px 1px 1px}
+.tampa-baixo{border-radius:1px 1px 4px 4px}
+.haste{position:relative;display:block;width:18px;height:38px;border-left:2px solid var(--aco);border-right:2px solid var(--aco);background-color:var(--porcelana);background-image:var(--listras);background-size:24px 24px;background-position:0 0;animation:girar .9s linear infinite}
+.haste::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(90deg,rgba(6,14,28,.5) 0%,rgba(6,14,28,0) 24%,rgba(255,255,255,.38) 36%,rgba(255,255,255,0) 52%,rgba(6,14,28,0) 72%,rgba(6,14,28,.45) 100%)}
+@keyframes girar{
+  from{background-position:0 0}
+  to{background-position:0 -24px}
+}
+.marca{display:flex;flex-direction:column;gap:5px;line-height:1}
+.marca-nome{align-self:flex-start;display:inline-block;font-family:var(--fonte-display);font-weight:900;font-size:34px;letter-spacing:.03em;background-image:linear-gradient(105deg,var(--aco) 0%,var(--aco) 40%,#fff 50%,var(--aco) 60%,var(--aco) 100%);background-size:300% 100%;background-position:90% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:brilho 6s ease-in-out infinite}
+@keyframes brilho{
+  0%{background-position:90% 0}
+  30%{background-position:10% 0}
+  100%{background-position:10% 0}
+}
+.marca-sub{font-size:11px;font-weight:600;letter-spacing:.34em;color:var(--aco)}
+@media (prefers-reduced-motion:reduce){
+  .haste,.marca-nome{animation:none}
+}
+
+/* Topo */
+.hero{position:relative;color:var(--porcelana);padding-bottom:56px;background-color:var(--marinho);background-image:linear-gradient(rgba(var(--porcelana-rgb),.05) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--porcelana-rgb),.05) 1px,transparent 1px);background-size:80px 80px;clip-path:polygon(0 0,100% 0,100% 100%,0 calc(100% - 56px))}
+.topo{padding-top:24px;padding-bottom:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 40px}
+.menu{display:flex;flex-wrap:wrap;align-items:center;gap:4px 28px}
+.hero-conteudo{padding-top:48px;padding-bottom:72px;display:flex;flex-direction:column;align-items:flex-start;gap:28px}
+.hero h1{font-weight:800;font-size:clamp(60px,8.2vw,116px);line-height:.92;text-wrap:balance}
+.lead{font-size:20px;line-height:1.55;color:var(--aco-claro);max-width:30em}
+.acoes{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin-top:8px}
+
+/* Aberto agora */
+.status{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:8px}
+.status-estado{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:700}
+.status-linha{font-size:17px;color:var(--aco-claro)}
+.status-ponto{width:10px;height:10px;border-radius:50%;background:var(--aco-escuro)}
+.status-ponto.aberto{background:var(--cor-aberto)}
+.status-ponto.fechado{background:var(--cor-fechado)}
+.status-grande{margin:22px 0 36px}
+.status-grande .status-estado,.status-grande .status-linha{font-size:18px}
+
+/* Serviços */
+.sec-servicos{background:var(--porcelana);color:var(--marinho)}
+.sec-servicos .miolo{padding-top:80px;padding-bottom:120px}
+.intro{display:flex;flex-direction:column;gap:20px;max-width:40em}
+.intro p{font-size:20px;line-height:1.55;color:var(--texto-suave)}
+.quadro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(480px,100%),1fr));gap:56px 80px;margin-top:56px;align-items:start}
+.coluna{display:flex;flex-direction:column;gap:56px}
+.grupo h3{font-weight:800;font-size:44px;line-height:1;padding-bottom:14px;border-bottom:3px solid var(--marinho)}
+.item{padding:20px 0;border-bottom:1px solid rgba(var(--marinho-rgb),.2)}
+.item-linha{display:flex;align-items:baseline;gap:14px}
+.item h4{font-weight:700;font-size:30px;line-height:1.1}
+.pontilhado{flex:1 1 auto;min-width:24px;border-bottom:2px dotted rgba(var(--marinho-rgb),.4);transform:translateY(-6px)}
+.preco{font-family:var(--fonte-display);font-weight:800;font-size:32px;line-height:1;white-space:nowrap}
+.item-info{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:6px}
+.item-info p{font-size:16px;line-height:1.5;color:var(--texto-suave);max-width:34em}
+.duracao{font-size:15px;color:var(--texto-mudo);white-space:nowrap}
+
+/* Horários */
+.sec-horarios{background:var(--marinho);color:var(--porcelana);padding-top:56px;clip-path:polygon(0 0,100% 56px,100% 100%,0 100%)}
+.horarios-grade{padding-top:56px;padding-bottom:112px;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:56px 80px}
+.horarios-info{flex:1 1 480px;min-width:0}
+.dias{border-top:1px solid rgba(var(--porcelana-rgb),.18)}
+.dia{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid rgba(var(--porcelana-rgb),.18)}
+.dia-nome{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:500}
+.dia-horas{font-family:var(--fonte-display);font-weight:700;font-size:30px;line-height:1}
+.dia.hoje{background:rgba(var(--porcelana-rgb),.09)}
+.dia.hoje .dia-nome{font-weight:700}
+.dia.fechado .dia-horas{color:var(--aco-escuro)}
+.tag-hoje{padding:3px 10px;background:var(--vermelho);color:#fff;font-size:13px;font-weight:700;border-radius:2px}
+.nota{margin-top:20px;font-size:16px;color:var(--aco)}
+.painel{flex:0 1 420px;min-width:0;background:var(--porcelana);color:var(--marinho);border-radius:3px;overflow:hidden}
+.faixa{height:14px;background-image:var(--listras);background-size:20px 20px}
+.painel-corpo{padding:36px 36px 40px;display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+.painel h3{font-weight:800;font-size:48px;line-height:.98}
+.painel p{font-size:18px;line-height:1.55;color:var(--texto-suave)}
+
+/* Contato */
+.sec-contato{background:var(--porcelana);color:var(--marinho)}
+.contato-grade{padding-top:104px;padding-bottom:120px;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:56px 80px}
+.contato-info{flex:1 1 420px;min-width:0}
+.dados{margin-top:36px;display:flex;flex-direction:column;border-top:3px solid var(--marinho)}
+.dados div{display:flex;flex-direction:column;gap:6px;padding:22px 0;border-bottom:1px solid rgba(var(--marinho-rgb),.2)}
+.dados dt{font-size:15px;font-weight:600;color:var(--texto-mudo)}
+.dados dd{font-size:24px;font-weight:600;line-height:1.35}
+.dados dd a{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.mapa{flex:1 1 420px;min-width:0;min-height:340px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;background:#E4E9ED;border:2px dashed rgba(var(--marinho-rgb),.4);border-radius:3px;font-size:18px;font-weight:600;color:var(--texto-suave)}
+.mapa iframe{display:block;width:100%;height:100%;min-height:340px;border:0}
+.mapa:has(iframe){padding:0;border:0;background:none}
+
+/* Rodapé */
+.rodape{background:var(--marinho);color:var(--aco-claro)}
+.rodape-topo{padding-top:56px;padding-bottom:28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px 40px}
+.menu-rodape{display:flex;flex-wrap:wrap;align-items:center;gap:4px 28px}
+.rodape-base{padding-bottom:40px}
+.rodape-base p{padding-top:24px;border-top:1px solid rgba(var(--porcelana-rgb),.14);font-size:14px;color:var(--aco-escuro)}
+
+/* Celular */
+@media (max-width:720px){
+  .miolo{padding-left:20px;padding-right:20px}
+  .topo{padding-top:18px;padding-bottom:18px}
+  .menu .nl{display:none}
+  .hero-conteudo{padding-top:32px;padding-bottom:48px;gap:24px}
+  .sec-servicos .miolo{padding-top:64px;padding-bottom:88px}
+  .grupo h3{font-size:38px}
+  .item h4{font-size:26px}
+  .preco{font-size:28px}
+  .horarios-grade{padding-top:40px;padding-bottom:88px}
+  .dia{padding:16px 12px}
+  .dia-nome{font-size:17px}
+  .dia-horas{font-size:26px}
+  .painel-corpo{padding:28px 24px 32px}
+  .painel h3{font-size:40px}
+  .contato-grade{padding-top:72px;padding-bottom:88px}
+  .dados dd{font-size:21px}
+}
+</style>
+</head>
+<body id="topo">
+
+<section class="hero escuro">
+  <header class="topo miolo">
+    <a class="logo" href="#topo" aria-label="Navalha Barbearia, voltar ao início">
+      <span class="poste" aria-hidden="true">
+        <span class="tampa tampa-cima"></span>
+        <span class="haste"></span>
+        <span class="tampa tampa-baixo"></span>
+      </span>
+      <span class="marca">
+        <span class="marca-nome">NAVALHA</span>
+        <span class="marca-sub">BARBEARIA</span>
+      </span>
+    </a>
+    <nav class="menu" aria-label="Principal">
+      <a class="nl" href="#servicos">Serviços</a>
+      <a class="nl" href="#horarios">Horários</a>
+      <a class="nl" href="#contato">Contato</a>
+      <a class="btn btn-sm" href="#contato" data-agendar>Agendar horário</a>
+    </nav>
+  </header>
+
+  <div class="hero-conteudo miolo">
+    <h1>Sai da cadeira alinhado.</h1>
+    <p class="lead">Corte, barba e acabamento na navalha, com toalha quente e hora marcada.</p>
+    <div class="acoes">
+      <a class="btn" href="#contato" data-agendar>Agendar horário</a>
+      <a class="lk" href="#servicos">Ver serviços e valores</a>
+    </div>
+    <div class="status" data-status hidden>
+      <span class="status-estado"><span class="status-ponto" aria-hidden="true"></span><span data-status-rotulo></span></span>
+      <span class="status-linha" data-status-linha></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVIÇOS E VALORES ===== -->
+<section id="servicos" class="sec-servicos claro">
+  <div class="miolo">
+    <div class="intro">
+      <h2>Serviços e valores</h2>
+      <p>Cabelo, barba e acabamento. No combo você paga menos do que nos serviços separados.</p>
+    </div>
+
+    <div class="quadro">
+      <div class="grupo">
+        <h3>Cabelo</h3>
+        <ul>
+          <li class="item">
+            <div class="item-linha"><h4>Corte</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 50</span></div>
+            <div class="item-info"><p>Degradê, social ou tesoura, com lavagem e finalização.</p><span class="duracao">40 min</span></div>
+          </li>
+          <li class="item">
+            <div class="item-linha"><h4>Acabamento</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 20</span></div>
+            <div class="item-info"><p>Contorno na navalha para manter o corte entre uma visita e outra.</p><span class="duracao">15 min</span></div>
+          </li>
+          <li class="item">
+            <div class="item-linha"><h4>Pigmentação</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 45</span></div>
+            <div class="item-info"><p>Cobre fios brancos e falhas, no cabelo ou na barba.</p><span class="duracao">30 min</span></div>
+          </li>
+          <li class="item">
+            <div class="item-linha"><h4>Hidratação</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 35</span></div>
+            <div class="item-info"><p>Tratamento para fios secos, com finalização.</p><span class="duracao">20 min</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="coluna">
+        <div class="grupo">
+          <h3>Barba</h3>
+          <ul>
+            <li class="item">
+              <div class="item-linha"><h4>Barba</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 40</span></div>
+              <div class="item-info"><p>Modelagem na navalha, toalha quente e hidratação.</p><span class="duracao">30 min</span></div>
+            </li>
+            <li class="item">
+              <div class="item-linha"><h4>Sobrancelha</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 15</span></div>
+              <div class="item-info"><p>Alinhamento na navalha ou na pinça.</p><span class="duracao">10 min</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="grupo">
+          <h3>Combos</h3>
+          <ul>
+            <li class="item">
+              <div class="item-linha"><h4>Corte + Barba</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 80</span></div>
+              <div class="item-info"><p>O básico completo, na mesma cadeira.</p><span class="duracao">1h10</span></div>
+            </li>
+            <li class="item">
+              <div class="item-linha"><h4>Corte + Barba + Sobrancelha</h4><span class="pontilhado" aria-hidden="true"></span><span class="preco">R$ 90</span></div>
+              <div class="item-info"><p>Cabelo, barba e sobrancelha em um só horário.</p><span class="duracao">1h20</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HORÁRIOS ===== -->
+<section id="horarios" class="sec-horarios escuro">
+  <div class="horarios-grade miolo">
+    <div class="horarios-info">
+      <h2>Horários</h2>
+      <div class="status status-grande" data-status hidden>
+        <span class="status-estado"><span class="status-ponto" aria-hidden="true"></span><span data-status-rotulo></span></span>
+        <span class="status-linha" data-status-linha></span>
+      </div>
+
+      <!--
+        Para mudar os horários, edite data-abre e data-fecha (HH:MM) de cada dia.
+        data-dow é o dia da semana (0 = domingo, 1 = segunda ... 6 = sábado): não mexa.
+        Sem data-abre, o dia aparece como "Fechado".
+      -->
+      <ul class="dias" id="lista-horarios">
+        <li class="dia" data-dow="1" data-abre="09:00" data-fecha="20:00"><span class="dia-nome">Segunda-feira<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">09:00 – 20:00</span></li>
+        <li class="dia" data-dow="2" data-abre="09:00" data-fecha="20:00"><span class="dia-nome">Terça-feira<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">09:00 – 20:00</span></li>
+        <li class="dia" data-dow="3" data-abre="09:00" data-fecha="20:00"><span class="dia-nome">Quarta-feira<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">09:00 – 20:00</span></li>
+        <li class="dia" data-dow="4" data-abre="09:00" data-fecha="20:00"><span class="dia-nome">Quinta-feira<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">09:00 – 20:00</span></li>
+        <li class="dia" data-dow="5" data-abre="09:00" data-fecha="20:00"><span class="dia-nome">Sexta-feira<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">09:00 – 20:00</span></li>
+        <li class="dia" data-dow="6" data-abre="08:00" data-fecha="18:00"><span class="dia-nome">Sábado<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">08:00 – 18:00</span></li>
+        <li class="dia" data-dow="0"><span class="dia-nome">Domingo<span class="tag-hoje" hidden>Hoje</span></span><span class="dia-horas">Fechado</span></li>
+      </ul>
+      <p class="nota">Atendimento com hora marcada.</p>
+    </div>
+
+    <aside class="painel claro">
+      <div class="faixa" aria-hidden="true"></div>
+      <div class="painel-corpo">
+        <h3>Reserve o seu horário</h3>
+        <p>O agendamento é pelo WhatsApp: mande o serviço que você quer e o dia que prefere.</p>
+        <a class="btn" href="#contato" data-agendar>Agendar horário</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== CONTATO ===== -->
+<section id="contato" class="sec-contato claro">
+  <div class="contato-grade miolo">
+    <div class="contato-info">
+      <h2>Onde estamos</h2>
+      <dl class="dados">
+        <div>
+          <dt>Endereço</dt>
+          <dd>Rua [nome da rua], [número]<br>[Bairro], [Cidade] – [UF]</dd>
+        </div>
+        <div>
+          <dt>WhatsApp</dt>
+          <dd data-whatsapp-numero>(00) 00000-0000</dd>
+        </div>
+        <div>
+          <dt>Instagram</dt>
+          <dd>@[seu_perfil]</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="mapa">
+      <!-- Para colocar o mapa: no Google Maps, clique em Compartilhar e depois em Incorporar um mapa. Copie o código iframe e cole aqui, no lugar do texto abaixo. -->
+      <span>[Mapa com o endereço da barbearia]</span>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape escuro">
+  <div class="rodape-topo miolo">
+    <a class="logo" href="#topo" aria-label="Navalha Barbearia, voltar ao início">
+      <span class="poste" aria-hidden="true">
+        <span class="tampa tampa-cima"></span>
+        <span class="haste"></span>
+        <span class="tampa tampa-baixo"></span>
+      </span>
+      <span class="marca">
+        <span class="marca-nome">NAVALHA</span>
+        <span class="marca-sub">BARBEARIA</span>
+      </span>
+    </a>
+    <nav class="menu-rodape" aria-label="Rodapé">
+      <a class="nl" href="#servicos">Serviços</a>
+      <a class="nl" href="#horarios">Horários</a>
+      <a class="nl" href="#contato">Contato</a>
+    </nav>
+  </div>
+  <div class="rodape-base miolo">
+    <p>© <span data-ano>2026</span> Navalha Barbearia. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ---------- CONFIGURAÇÃO ----------
+  // Número do WhatsApp só com dígitos, começando por 55 + DDD. Exemplo: '5522999999999'
+  // Preenchendo aqui, todos os botões "Agendar horário" passam a abrir o WhatsApp.
+  var WHATSAPP = '';
+  var MENSAGEM = 'Olá! Quero agendar um horário.';
+  // ----------------------------------
+
+  var DIAS_CURTOS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+
+  function dois(n) { return n < 10 ? '0' + n : '' + n; }
+  function hora(m) { return dois(Math.floor(m / 60)) + ':' + dois(m % 60); }
+  function minutos(t) {
+    var p = String(t).split(':');
+    return parseInt(p[0], 10) * 60 + (parseInt(p[1], 10) || 0);
+  }
+  function formatarTelefone(d) {
+    var n = String(d).replace(/\D/g, '');
+    if (n.indexOf('55') === 0 && (n.length === 12 || n.length === 13)) n = n.slice(2);
+    if (n.length === 11) return '(' + n.slice(0, 2) + ') ' + n.slice(2, 7) + '-' + n.slice(7);
+    if (n.length === 10) return '(' + n.slice(0, 2) + ') ' + n.slice(2, 6) + '-' + n.slice(6);
+    return n;
+  }
+
+  // ---------- WhatsApp nos botões ----------
+  var numero = String(WHATSAPP).replace(/\D/g, '');
+  if (numero) {
+    var linkZap = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(MENSAGEM);
+    var botoes = document.querySelectorAll('[data-agendar]');
+    for (var i = 0; i < botoes.length; i++) {
+      botoes[i].setAttribute('href', linkZap);
+      botoes[i].setAttribute('target', '_blank');
+      botoes[i].setAttribute('rel', 'noopener');
+    }
+    var campoZap = document.querySelector('[data-whatsapp-numero]');
+    if (campoZap) {
+      var linkNumero = document.createElement('a');
+      linkNumero.href = linkZap;
+      linkNumero.target = '_blank';
+      linkNumero.rel = 'noopener';
+      linkNumero.textContent = formatarTelefone(numero);
+      campoZap.textContent = '';
+      campoZap.appendChild(linkNumero);
+    }
+  }
+
+  // ---------- Horários e "aberto agora" ----------
+  var linhas = document.querySelectorAll('#lista-horarios .dia');
+  var porDia = {};
+  for (var j = 0; j < linhas.length; j++) {
+    var li = linhas[j];
+    var abre = li.getAttribute('data-abre');
+    var fecha = li.getAttribute('data-fecha');
+    var temHorario = !!(abre && fecha);
+    var item = {
+      el: li,
+      abre: temHorario ? minutos(abre) : null,
+      fecha: temHorario ? minutos(fecha) : null
+    };
+    porDia[parseInt(li.getAttribute('data-dow'), 10)] = item;
+    var campoHoras = li.querySelector('.dia-horas');
+    if (campoHoras) {
+      campoHoras.textContent = temHorario ? hora(item.abre) + ' – ' + hora(item.fecha) : 'Fechado';
+    }
+    li.classList.toggle('fechado', !temHorario);
+  }
+
+  function atualizar() {
+    var agora = new Date();
+    var dow = agora.getDay();
+    var min = agora.getHours() * 60 + agora.getMinutes();
+
+    for (var d = 0; d < 7; d++) {
+      var it = porDia[d];
+      if (!it) continue;
+      var eHoje = d === dow;
+      it.el.classList.toggle('hoje', eHoje);
+      var tag = it.el.querySelector('.tag-hoje');
+      if (tag) tag.hidden = !eHoje;
+    }
+
+    var hoje = porDia[dow];
+    var aberto = !!hoje && hoje.abre !== null && min >= hoje.abre && min < hoje.fecha;
+    var linha = '';
+    if (aberto) {
+      linha = 'Fecha às ' + hora(hoje.fecha);
+    } else if (hoje && hoje.abre !== null && min < hoje.abre) {
+      linha = 'Abre hoje às ' + hora(hoje.abre);
+    } else {
+      for (var k = 1; k <= 7; k++) {
+        var prox = (dow + k) % 7;
+        var p = porDia[prox];
+        if (p && p.abre !== null) {
+          linha = 'Abre ' + (k === 1 ? 'amanhã' : DIAS_CURTOS[prox]) + ' às ' + hora(p.abre);
+          break;
+        }
+      }
+    }
+
+    var blocos = document.querySelectorAll('[data-status]');
+    for (var b = 0; b < blocos.length; b++) {
+      var bloco = blocos[b];
+      var rotulo = bloco.querySelector('[data-status-rotulo]');
+      var detalhe = bloco.querySelector('[data-status-linha]');
+      var ponto = bloco.querySelector('.status-ponto');
+      if (rotulo) rotulo.textContent = aberto ? 'Aberto agora' : 'Fechado agora';
+      if (detalhe) detalhe.textContent = linha;
+      if (ponto) {
+        ponto.classList.toggle('aberto', aberto);
+        ponto.classList.toggle('fechado', !aberto);
+      }
+      bloco.hidden = false;
+    }
+  }
+
+  if (linhas.length) {
+    atualizar();
+    setInterval(atualizar, 60000);
+  }
+
+  // ---------- Ano no rodapé ----------
+  var ano = document.querySelector('[data-ano]');
+  if (ano) ano.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
